@@ -7,7 +7,7 @@ class CustomerController{
         try{
             const {customerCode, customerName, customerEmail} = req.body;
 
-            if(customerCode === null || customerCode === undefined || customerCode === ''){
+            if(customerCode === null || customerCode === undefined || customerCode.trim() === ''){
                 return res.status(400).json({
                     "isSuccessful" : false,
                     "message" : "Customer code is required",

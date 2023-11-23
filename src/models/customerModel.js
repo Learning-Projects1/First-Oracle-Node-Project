@@ -13,12 +13,8 @@ class CustomerModel{
                 {customerCode, customerName, customerEmail}
             )
 
-
             // Commit the transaction
             await connection.execute("COMMIT");
-
-
-            console.log(result.rowsAffected)
 
             return result.rowsAffected === 1;
 
