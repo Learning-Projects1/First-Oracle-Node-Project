@@ -16,7 +16,7 @@ class AuthController {
       if(!userName || userName.trim() === ''){
         res.status(400).json({
           "isSuccessful": false,
-          "message": "userName is required"
+          "message": "UserName is required"
         });
 
       }
@@ -24,7 +24,7 @@ class AuthController {
       else if(!email || email.trim() === ''){
         res.status(400).json({
           "isSuccessful": false,
-          "message": "email is required"
+          "message": "Email is required"
         });
 
       }
@@ -32,14 +32,21 @@ class AuthController {
       else if(!password || password.trim() === ''){
         res.status(400).json({
           "isSuccessful": false,
-          "message": "password is required"
+          "message": "Password is required"
+        });
+      }
+
+      else if(password.trim().length < 6){
+        res.status(400).json({
+          "isSuccessful": false,
+          "message": "Password length should be at least 6 characters"
         });
       }
 
       else if(await AuthModel.findUserById(userName) === true){
         res.status(400).json({
           "isSuccessful": false,
-          "message": "username is not available"
+          "message": "Username is not available"
         });
 
       }
@@ -77,22 +84,51 @@ class AuthController {
   //***************************************************************************************************************************************************************/  
   async login(req, res) {
     try {
-      const { email, password } = req.body;
-      const user = await AuthModel.findUserByEmail(email);
+      const { userName, password } = req.body;
 
-      if (user && user.password === password) {
-        res.json({ message: 'Login successful' });
-      } else {
-        res.status(401).json({ error: 'Invalid credentials' });
+      if(!userName || userName.trim() === ''){
+        res.status(400).json({
+          "isSuccessful": false,
+          "message": 'Username is required',
+        })
       }
+
+      else if(!password || password.trim() === ''){
+        res.status(400).json({
+          "isSuccessful": false,
+          "message": 'Password is required',
+        })
+      }
+
+      else {
+        const user = await AuthModel.findUserById(userName);
+
+        if (user && await AuthModel.comparePassword(userName, password)) {
+          res.status(200).json({
+            "isSuccessful": true,
+            "message": 'Logged in successfully',
+          })
+        } else {
+          res.status(400).json({
+            "isSuccessful": false,
+            "message": 'Invalid credentials',
+          })
+        }
+      }
+
+
     } catch (error) {
       console.error(error);
       res.status(500).json({
-        message: 'Internal Server Error',
-        error: error.message,
+        "isSuccessful": false,
+        "message": 'Internal Server Error',
+        "error": error.message,
       });
     }
   }
+
+
+
 }
 
 module.exports = new AuthController();
