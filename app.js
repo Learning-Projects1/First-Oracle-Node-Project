@@ -13,7 +13,7 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-async function start() {
+async function start() { 
   try {
     await dbConfig.initialize();
     

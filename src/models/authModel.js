@@ -2,6 +2,8 @@ const oracledb = require('oracledb');
 const { closeDbConnection } = require('../utils/helper_functions');
 const bcrypt = require('bcrypt')
 const saltRounds = 10;
+const jwt = require('jsonwebtoken')
+require('dotenv').config();
 
 class AuthModel {
 
@@ -130,6 +132,30 @@ class AuthModel {
         closeDbConnection(connection);
       }
     }
+
+  //******************************************************** Generate token ***********************************************************************************/  
+  static async generateBearerToken(userName){
+    try{
+      const payload = {
+        time : Date(),
+        userName : userName
+      };
+      const options = {expiresIn : '1m'};
+      const jwtSeceretKey = process.env.JWT_SECRET_KEY;
+  
+      console.log("Secret key ==>"+ jwtSeceretKey)
+
+      const token = jwt.sign(payload, jwtSeceretKey, options)
+  
+      return token;
+    }catch(err){
+      console.error("Token error==>"+err)
+      return ''
+    }
+  }
+
+
+
 }
 
 module.exports = AuthModel;

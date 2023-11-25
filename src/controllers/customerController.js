@@ -1,10 +1,14 @@
-const CustomerModel = require('../models/customerModel')
+const CustomerModel = require('../models/customerModel');
+const { authenticateToken } = require('../utils/helper_functions');
 
 
 class CustomerController{
 
     async addCustomer(req, res){
         try{
+
+            // await authenticateToken(req,res)
+
             const {customerCode, customerName, customerEmail} = req.body;
 
             if(customerCode === null || customerCode === undefined || customerCode.trim() === ''){
@@ -43,6 +47,9 @@ class CustomerController{
 
     async getCustomers(req, res){
         try{
+
+            // await authenticateToken(req,res)
+            
             const customers = await CustomerModel.getCustomers();
             
             return res.status(200).json({

@@ -5,10 +5,11 @@ class AuthController {
 
 
   //***************************************************************************************************************************************************************/  
-  //******************************************************** Sign Up *********************************************************************************************/  
+  //******************************************************** Sign Up **********************************************************************************************/  
   //***************************************************************************************************************************************************************/  
   async signup(req, res) {
     try {
+
       const { userName, email, password } = req.body;
 
       console.log(req.body);
@@ -104,9 +105,13 @@ class AuthController {
         const user = await AuthModel.findUserById(userName);
 
         if (user && await AuthModel.comparePassword(userName, password)) {
+
+          const token = await AuthModel.generateBearerToken(userName)
+
           res.status(200).json({
             "isSuccessful": true,
             "message": 'Logged in successfully',
+            "token" : token
           })
         } else {
           res.status(400).json({
