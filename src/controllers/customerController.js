@@ -1,5 +1,5 @@
 const CustomerModel = require('../models/customerModel');
-const { authenticateToken } = require('../utils/helper_functions/authenticationToken');
+const { authenticateToken } = require('../utils/helper_functions/tokenAuthentication');
 
 
 class CustomerController {
