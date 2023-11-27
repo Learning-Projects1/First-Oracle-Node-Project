@@ -1,8 +1,8 @@
 const oracledb = require('oracledb');
-const { closeDbConnection } = require('../utils/helper_functions');
 const bcrypt = require('bcrypt')
 const saltRounds = 10;
 const jwt = require('jsonwebtoken')
+const {closeDbConnection}  = require('../utils/helper_functions/closeDbConnection');
 require('dotenv').config();
 
 class AuthModel {
@@ -140,7 +140,7 @@ class AuthModel {
         time : Date(),
         userName : userName
       };
-      const options = {expiresIn : '1m'};
+      const options = {expiresIn : '10m'};
       const jwtSeceretKey = process.env.JWT_SECRET_KEY;
   
       console.log("Secret key ==>"+ jwtSeceretKey)
